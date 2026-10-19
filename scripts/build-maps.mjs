@@ -6,6 +6,18 @@ const regions={china:[73,18,136,55],europe:[-13,33,45,71],poland:[10,46,36,59]};
 const palette=['#c8b777','#8caf9b','#c79580','#9aa9be','#c5a6bb','#a4b681','#d4c798','#84b4b5','#c0b2cf','#d9ae7b','#b5c8a5','#adbdcd'];
 const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 const filename=y=>`world_${y<0?'bc'+Math.abs(y):y}.geojson`;
+// Correct identified anachronistic labels; geometry remains a coarse source reconstruction.
+const corrections={
+ '-1000':{'Zhoa':'Zhou'},
+ '-100':{'Mauryan Empire':'Post-Mauryan kingdoms','Min-Yue':'Han Empire','Nan-Yue':'Han Empire','Kushan Empire':'Central Asian polities'},
+ '300':{'Gupta Empire':'North Indian kingdoms','Han Zhao':'Jin','Satavahanihara':'Deccan kingdoms'},
+ '1000':{'Xixia':'Tangut polity (Dingnan)','Nan Chao':'Dali'},
+ '1100':{'Nan Chao':'Dali','Kingdom of Sukhotai':'Mon and Tai polities'},
+ '1200':{'Liao':'Jin (Jurchen)','Nan Chao':'Dali','Mongol Empire':'Mongol and steppe polities','Imperial Japan (Fujiwara)':'Kamakura Japan','Sultanate of Delhi':'Ghurid possessions','Buyid dynasty':'Iranian polities'},
+ '1700':{'Dutch Formosa':'Taiwan (Qing)','Post-Ming Warlords':'Qing Empire'},
+ '1920':{'USSR':'Soviet Russia'},
+ '1960':{'Tibet':'Tibet (China)'}
+};
 const color=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return palette[h%palette.length]};
 function clip(r,b){let p=r;for(const [axis,value,sign] of [[0,b[0],1],[0,b[2],-1],[1,b[1],1],[1,b[3],-1]]){const out=[];for(let i=0;i<p.length;i++){const a=p[i],z=p[(i+1)%p.length],ai=sign*(a[axis]-value)>=0,zi=sign*(z[axis]-value)>=0;if(ai)out.push(a);if(ai!==zi){const t=(value-a[axis])/(z[axis]-a[axis]);out.push([a[0]+t*(z[0]-a[0]),a[1]+t*(z[1]-a[1])]);}}p=out;}return p;}
 function simplify(r){if(r.length<5)return r;const out=[r[0]];for(let i=1;i<r.length-1;i++){const a=out.at(-1),b=r[i];if(Math.hypot(b[0]-a[0],b[1]-a[1])>.045)out.push(b);}out.push(r.at(-1));return out;}
@@ -14,6 +26,7 @@ const manifest={};
 fs.mkdirSync('maps/source',{recursive:true});
 for(const year of years){
  const raw=upstream?JSON.parse(fs.readFileSync(path.join(upstream,'geojson',filename(year)))):null;
+ if(raw)for(const f of raw.features){const rename=corrections[year];if(rename){for(const field of ['NAME','SUBJECTO'])if(rename[f.properties[field]])f.properties[field]=rename[f.properties[field]];}}
  for(const [region,bounds] of Object.entries(regions)){
   const key=`${year}-${region}`;const sourcePath=`maps/source/${key}.geojson`;
   const source=raw?{type:'FeatureCollection',features:raw.features.flatMap(f=>{

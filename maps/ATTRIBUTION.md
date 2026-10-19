@@ -12,3 +12,7 @@ Mapy są rekonstrukcjami edukacyjnymi, nie wyznaczeniem dokładnych granic. Dane
 ## Odtworzenie map
 
 Z katalogu repozytorium: `node scripts/build-maps.mjs` odtwarza SVG z dołączonych regionalnych plików GeoJSON. `node scripts/build-maps.mjs /ścieżka/do/historical-basemaps` ponownie wycina regiony ze zbioru źródłowego. Do odtworzenia identycznej wersji należy użyć wskazanego powyżej commitu.
+
+## Korekty etykiet
+
+Poprawiono rozpoznane anachronizmy nazw: m.in. Liao → Jin w 1200, Nanzhao → Dali w 1000–1200, imperium mongolskie → wspólnoty mongolskie i stepowe w 1200, ZSRR → Rosja Radziecka w 1920. W 1000 obszar Xixia nazwano władztwem tanguckim Dingnan (przed proklamacją Zachodniego Xia w 1038). Zaktualizowano też wybrane etykiety Indii, Japonii i Tajwanu. Pełny wykaz korekt jest w generatorze. Są to korekty nazw, nie nowa rekonstrukcja geometrii; zasięgi pozostają uproszczeniem źródła i wymagają dalszej weryfikacji do zastosowań naukowych.
