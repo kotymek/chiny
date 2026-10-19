@@ -1,24 +1,34 @@
 # W tym samym czasie
 
-Interaktywny atlas porównujący historię Chin, Europy i ziem polskich, od 1200 p.n.e. do 2000 n.e. Polska wersja językowa, 14 przedziałów, 42 karty z miniaturami map ośrodków, wyszukiwanie, filtry epok, wybór roku, trzy przykładowe porównania i linki do źródeł.
+[Otwórz atlas](https://kotymek.github.io/chiny/)
 
-## Uruchomienie
+Polskojęzyczna historia Chin, Europy i ziem polskich: 14 przedziałów, 42 karty, 243 wydarzenia i 75 map dla 25 lat odniesienia (1200 p.n.e.–2000 n.e.).
 
-Otwórz `index.html` w przeglądarce. Bez instalacji i bez procesu budowania. Opcjonalnie uruchom dowolny serwer statyczny w katalogu projektu. Fonty Google są opcjonalne; przy braku sieci strona używa fontów systemowych.
+Wyszukiwanie, filtry epok, wybór roku, skróty do Cezara, Mieszka I i roku 1200 oraz ukrywanie polskiej kolumny. Wybór roku mapy synchronizuje trzy regiony. Kliknięcie miniatury otwiera duży widok z legendą, źródłem i pobieraniem SVG. Okno obsługuje Escape i powrót fokusu.
 
-## Weryfikacja
+## Uruchomienie i testy
 
-`node tests/check.mjs`
+Otwórz index.html w przeglądarce. Bez instalowania zależności. Mapy są lokalnymi plikami SVG. Google Fonts ma systemowy fallback.
 
-## Publikacja
+Testy: `node tests/check.mjs`. Odtworzenie map z dołączonych danych: `node scripts/build-maps.mjs`.
 
-Workflow `.github/workflows/pages.yml` publikuje gałąź `main` na GitHub Pages. W Settings → Pages wybierz GitHub Actions, jeśli Pages nie zostało włączone automatycznie. Docelowy adres: https://kotymek.github.io/chiny/
+Workflow .github/workflows/pages.yml publikuje gałąź main na GitHub Pages po testach.
 
-## Treść i mapy
+## Edycja
 
-`data.js` zawiera przedziały, wydarzenia, ośrodki i źródła. `app.js` renderuje atlas i schematy lokalizacji. Mapki nie rekonstruują granic historycznych. Kontury są orientacyjne, punkty wynikają ze współrzędnych ośrodków. Biskupin w najwcześniejszym przedziale jest lokalizatorem regionu kultury łużyckiej, a nie datowaniem budowy słynnej osady. Datowanie p.n.e. nie używa roku zerowego. Karty opisują całe przedziały, nie dowolny pojedynczy rok. Podział na epoki służy nawigacji; historia Chin ma własną periodyzację. Materiał stanowi wybór edukacyjny, a źródła są punktami do dalszej lektury.
+- data.js: opisy epok i podstawowe wydarzenia.
+- extra-events.js: dodatkowe wydarzenia i sortowanie.
+- app.js: oś czasu, wyszukiwanie i nawigacja.
+- historical-maps.js: wybór roku, miniatury, okno mapy i legenda.
+- maps/: SVG, manifest, regionalne źródła GeoJSON i licencja.
+- scripts/build-maps.mjs: generator map.
 
-## Dostępność
+## Metoda i źródła
 
-Semantyczny HTML, obsługa klawiatury, etykiety pól, komunikaty wyszukiwania, opisy map, ograniczenie animacji według preferencji systemu i responsywny układ trzech kolumn.
+Mapy: André Ourednik i współautorzy, Historical Basemaps, wersja da7a4b735ecef70aebdc9c73e409d8a2500d50f3, GPL-3.0. [Opracowanie i źródła](maps/ATTRIBUTION.md), [licencja map](maps/LICENSE).
 
+Dane są przycięte i uproszczone. Zachowano klasy precyzji granic. Brak danych nie oznacza braku mieszkańców. Mapy nie rekonstruują wszystkich wewnętrznych podziałów i nie rozstrzygają sporów terytorialnych. Nazwy zachowano w języku źródła.
+
+Mapa przedstawia konkretny rok, nie cały przedział ani automatycznie rok wpisany w wyszukiwarce. Dawne mapy obejmują również obszary ludów i kultur. Ziemie polskie nie oznaczają istnienia Polski w starożytności. Daty służą porównaniom edukacyjnym; nie stosujemy roku zerowego. Odstępy między wierszami nie są proporcjonalne do czasu.
+
+Treści: chronologie Smithsonian i Metropolitan Museum of Art, UNESCO, Narodowy Instytut Dziedzictwa i materiały podlinkowane przy wydarzeniach. Atlas to wybór edukacyjny i punkt wyjścia do dalszej lektury.
