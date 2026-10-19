@@ -3,7 +3,7 @@ const mapChoices={};
 const mapEscape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 function selectedMapYear(era){return mapChoices[era.id]??MAP_YEARS[era.id][0]}
 function mapYearControl(era){return `<label class="map-year-label">Mapa z roku<select data-map-year="${era.id}" aria-label="Rok map dla epoki ${era.label}">${MAP_YEARS[era.id].map(y=>`<option value="${y}" ${selectedMapYear(era)===y?'selected':''}>${formatYear(y)}</option>`).join('')}</select></label>`}
-function historicalMap(era,region){const y=selectedMapYear(era);return `<figure class="mini-map historical-map"><button class="map-open" data-map-era="${era.id}" data-map-region="${region}" aria-label="Powiększ mapę: ${regionNames[regions.indexOf(region)]}, ${formatYear(y)}"><img loading="lazy" width="900" height="520" src="maps/${y}-${region}.svg?v=3" alt="Mapa granic i obszarów historycznych: ${regionNames[regions.indexOf(region)]}, rok ${formatYear(y)}"><span>Rok ${formatYear(y)} · Powiększ ⤢</span></button><figcaption>Granice i zasięgi przybliżone dla wybranego roku. ${y<960&&region==='poland'?'Przed powstaniem państwa polskiego: obszary ludów i kultur.':'Nie przedstawia całego przedziału.'}</figcaption></figure>`}
+function historicalMap(era,region,year=selectedMapYear(era)){const y=year;return `<figure class="mini-map historical-map"><button class="map-open" data-map-era="${era.id}" data-map-region="${region}" data-map-year-value="${y}" aria-label="Powiększ mapę: ${regionNames[regions.indexOf(region)]}, ${formatYear(y)}"><img loading="lazy" width="900" height="520" src="maps/${y}-${region}.svg?v=3" alt="Mapa granic i obszarów historycznych: ${regionNames[regions.indexOf(region)]}, rok ${formatYear(y)}"><span>Rok ${formatYear(y)} · Powiększ ⤢</span></button><figcaption>Granice i zasięgi przybliżone dla wybranego roku. ${y<960&&region==='poland'?'Przed powstaniem państwa polskiego: obszary ludów i kultur.':'Nie przedstawia całego przedziału.'}</figcaption></figure>`}
 function setupHistoricalMaps(){
  const dialog=document.querySelector('#map-dialog');
  let opener;
@@ -14,9 +14,9 @@ function setupHistoricalMaps(){
   document.querySelectorAll(`#${id} .historical-map`).forEach((figure,i)=>{figure.outerHTML=historicalMap(era,regions[i])});
   document.querySelector('#status').textContent=`Mapy: ${era.label}, rok ${formatYear(mapChoices[id])}. Zaktualizowano wszystkie trzy regiony.`;
  });
- document.querySelector('#timeline').addEventListener('click',e=>{
+ document.querySelector('#atlas').addEventListener('click',e=>{
   const button=e.target.closest('.map-open');if(!button)return;opener=button;
-  const era=ERAS.find(x=>x.id===button.dataset.mapEra),region=button.dataset.mapRegion,year=selectedMapYear(era),entry=MAP_MANIFEST[`${year}-${region}`];
+  const era=ERAS.find(x=>x.id===button.dataset.mapEra),region=button.dataset.mapRegion,year=Number(button.dataset.mapYearValue),entry=MAP_MANIFEST[`${year}-${region}`];
   document.querySelector('#map-title').textContent=`${regionNames[regions.indexOf(region)]} · ${formatYear(year)}`;
   document.querySelector('#map-image').src=`maps/${year}-${region}.svg?v=3`;
   document.querySelector('#map-image').alt=`Granice i obszary historyczne: ${regionNames[regions.indexOf(region)]}, ${formatYear(year)}`;

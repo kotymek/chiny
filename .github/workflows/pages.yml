@@ -23,7 +23,7 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir _site
-          cp index.html style.css app.js data.js extra-events.js historical-maps.js _site/
+          cp index.html style.css app.js data.js extra-events.js historical-maps.js time-explorer.js _site/
           cp -r maps _site/
       - uses: actions/configure-pages@v5
         with:

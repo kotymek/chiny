@@ -32,3 +32,16 @@ assert(eventCount>=200);
 assert(MAP_MANIFEST['1200-china'].legend.some(l=>/Song|Sung/i.test(l.name)));
 assert(MAP_MANIFEST['1920-poland'].legend.some(l=>/Poland/i.test(l.name)));
 console.log(`OK: ${ERAS.length} periods, ${eventCount} events, ${Object.keys(MAP_MANIFEST).length} maps; dates, geometry, attribution and syntax verified.`);
+vm.runInContext(fs.readFileSync('time-explorer.js','utf8')+'\nglobalThis.timeApi={sliderToYear,yearToSlider,timeSelection};',context);
+const {sliderToYear,yearToSlider,timeSelection}=context.timeApi;
+for(let index=-1200;index<=1999;index++){
+ const year=sliderToYear(index);assert.notEqual(year,0);assert.equal(yearToSlider(year),index);
+ const result=timeSelection(year);assert(result);assert(MAP_YEARS[result.era.id].includes(result.mapYear));
+ assert(result.era.start<=year&&result.era.end>=year);
+}
+assert.equal(timeSelection(0),null);
+assert.equal(timeSelection(966).mapYear,1000);
+assert.equal(timeSelection(1200).mapYear,1200);
+assert.equal(timeSelection(2000).mapYear,2000);
+assert.equal(sliderToYear(-1),-1);assert.equal(sliderToYear(0),1);
+console.log('OK: slider covers all 3200 historical years, skips zero, and selects valid synchronized map dates.');

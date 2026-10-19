@@ -19,6 +19,7 @@ const answers={
 function jump(year,updateUrl=true){
  const answer=document.querySelector('#answer');
  if(!Number.isInteger(year)||year===0||year< -1200||year>2000){document.querySelector('#status').textContent='Wpisz rok od −1200 do 2000. Daty p.n.e. wpisuj z minusem. W tym zapisie nie ma roku 0.';return;}
+ updateExplorer(year);
  activeFilter='all';document.querySelector('#search').value='';document.querySelector('#year').value=year;render();
  const e=ERAS.find(e=>year>=e.start&&year<=e.end);const a=answers[String(year)];
  answer.hidden=false;answer.innerHTML=a?`<h3>${a[0]}</h3><p>${a[1]}</p>`:`<h3>Rok ${formatYear(year)}</h3><p>Wybrany przedział: ${e.label}. Karty poniżej przedstawiają kontekst całego okresu ${formatYear(e.start)}–${formatYear(e.end)}, nie tylko wydarzenia wybranego roku.</p>`;
@@ -36,5 +37,7 @@ document.querySelector('#go').addEventListener('click',()=>{resetAnswer();jump(N
 document.querySelector('#year').addEventListener('keydown',e=>{if(e.key==='Enter'){resetAnswer();jump(Number(e.target.value))}});
 document.querySelector('#poland').addEventListener('change',e=>document.querySelector('#atlas').classList.toggle('no-poland',!e.target.checked));
 setupHistoricalMaps();
+setupTimeExplorer();
 render();
+if(/^#czas=-?\d+$/.test(location.hash))updateExplorer(Number(location.hash.split('=')[1]));
 if(/^#rok=-?\d+$/.test(location.hash))jump(Number(location.hash.split('=')[1]),false);
